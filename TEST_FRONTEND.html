@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CCCD Extractor - Frontend Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        .tab-btn {
+            padding: 10px 20px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 16px;
+            color: #666;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .tab-btn.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+        }
+        
+        .section h2 {
+            margin-bottom: 15px;
+            color: #333;
+            border-left: 4px solid #667eea;
+            padding-left: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        input[type="file"],
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        
+        input[type="file"]:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .file-preview {
+            margin-top: 10px;
+            padding: 10px;
+            background: #f5f5f5;
+            border-radius: 5px;
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+        
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+        
+        .btn-danger {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .alert-info {
+            background: #e3f2fd;
+            color: #1976d2;
+            border: 1px solid #90caf9;
+        }
+        
+        .alert-success {
+            background: #f1f8e9;
+            color: #558b2f;
+            border: 1px solid #aed581;
+        }
+        
+        .alert-error {
+            background: #ffebee;
+            color: #d32f2f;
+            border: 1px solid #ffcdd2;
+        }
+        
+        .progress-section {
+            display: none;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        
+        .progress-section.show {
+            display: block;
+        }
+        
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background: #e0e0e0;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            width: 0%;
+            transition: width 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        
+        .progress-text {
+            color: #666;
+            font-size: 13px;
+            margin: 5px 0;
+        }
+        
+        .result-section {
+            display: none;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 5px;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .result-section.show {
+            display: block;
+        }
+        
+        .result-data {
+            max-height: 400px;
+            overflow-y: auto;
+            background: white;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        
+        .jobs-list {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        
+        .job-item {
+            padding: 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            background: white;
+        }
+        
+        .job-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .job-id {
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .job-status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .job-status.pending {
+            background: #fff9c4;
+            color: #f57f17;
+        }
+        
+        .job-status.running {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+        
+        .job-status.completed {
+            background: #f1f8e9;
+            color: #558b2f;
+        }
+        
+        .job-status.failed {
+            background: #ffebee;
+            color: #d32f2f;
+        }
+        
+        .job-progress {
+            margin: 10px 0;
+        }
+        
+        .job-progress-bar {
+            width: 100%;
+            height: 15px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .job-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s;
+        }
+        
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+        
+        .code-block {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>CCCD Extractor - Frontend Test</h1>
+            <p>Test API endpoints locally • Real-time progress tracking • Multiple formats</p>
+        </div>
+        
+        <div class="content">
+            <!-- Server Status -->
+            <div id="statusAlert" class="alert alert-info">
+                <span class="spinner" style="margin-right: 10px;"></span>
+                Checking server status...
+            </div>
+            
+            <!-- Tabs -->
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchTab('quick')">🚀 Quick Read</button>
+                <button class="tab-btn" onclick="switchTab('batch')">📦 Batch Process</button>
+                <button class="tab-btn" onclick="switchTab('jobs')">📊 Jobs Monitor</button>
+                <button class="tab-btn" onclick="switchTab('test')">🧪 API Test</button>
+            </div>
+            
+            <!-- Quick Read Tab -->
+            <div id="quick" class="tab-content active">
+                <div class="section">
+                    <h2>Quick Read - Single CCCD</h2>
+                    <p style="color: #666; margin-bottom: 15px;">
+                        Đọc nhanh một CCCD với 2 ảnh (mặt trước và mặt sau). Kết quả trả về ngay lập tức.
+                    </p>
+                    
+                    <div class="form-group">
+                        <label for="mtFile">Ảnh Mặt Trước (MT)</label>
+                        <input type="file" id="mtFile" accept="image/*">
+                        <div id="mtPreview" class="file-preview" style="display: none;"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="msFile">Ảnh Mặt Sau (MS)</label>
+                        <input type="file" id="msFile" accept="image/*">
+                        <div id="msPreview" class="file-preview" style="display: none;"></div>
+                    </div>
+                    
+                    <div class="button-group">
+                        <button class="btn-primary" onclick="handleQuickRead()">
+                            📸 Đọc Nhanh
+                        </button>
+                        <button class="btn-secondary" onclick="clearQuickRead()">
+                            Clear
+                        </button>
+                    </div>
+                    
+                    <div id="quickResult" class="result-section">
+                        <h3 style="margin-bottom: 10px;">Kết quả:</h3>
+                        <div class="result-data" id="quickResultData"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Batch Process Tab -->
+            <div id="batch" class="tab-content">
+                <div class="section">
+                    <h2>Batch Process - Multiple CCCDs</h2>
+                    <p style="color: #666; margin-bottom: 15px;">
+                        Xử lý multiple CCCD từ file ZIP/PDF/Excel với tracking progress real-time.
+                    </p>
+                    
+                    <div class="form-group">
+                        <label for="batchFile">File ZIP/PDF/Excel</label>
+                        <input type="file" id="batchFile" accept=".zip,.pdf,.xlsx,.xls">
+                        <div id="batchPreview" class="file-preview" style="display: none;"></div>
+                    </div>
+                    
+                    <div class="button-group">
+                        <button class="btn-primary" onclick="handleBatchSubmit()">
+                            ✈️ Gửi Batch
+                        </button>
+                        <button class="btn-danger" id="cancelBtn" style="display: none;" onclick="handleCancel()">
+                            ❌ Hủy
+                        </button>
+                        <button class="btn-secondary" onclick="clearBatch()">
+                            Clear
+                        </button>
+                    </div>
+                    
+                    <!-- Progress Section -->
+                    <div id="progressSection" class="progress-section">
+                        <div class="progress-info">
+                            <span id="statusText">Đang khởi tạo...</span>
+                            <span id="progressPercent">0%</span>
+                        </div>
+                        
+                        <div class="progress-bar">
+                            <div id="progressFill" class="progress-fill" style="width: 0%">0%</div>
+                        </div>
+                        
+                        <div id="messageText" class="progress-text"></div>
+                        <div id="statsText" class="progress-text"></div>
+                        
+                        <div class="code-block">
+                            <strong>Job ID:</strong> <span id="jobIdText">-</span><br>
+                            <strong>Status:</strong> <span id="statusDetailText">-</span><br>
+                            <strong>Started:</strong> <span id="createdAtText">-</span><br>
+                            <strong>Updated:</strong> <span id="updatedAtText">-</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Result Section -->
+                    <div id="batchResult" class="result-section">
+                        <h3 style="margin-bottom: 10px;">Kết quả Xử Lý:</h3>
+                        <div class="result-data" id="batchResultData"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Jobs Monitor Tab -->
+            <div id="jobs" class="tab-content">
+                <div class="section">
+                    <h2>Jobs Monitor</h2>
+                    <p style="color: #666; margin-bottom: 15px;">
+                        Theo dõi tất cả jobs đang chạy hoặc đã hoàn thành.
+                    </p>
+                    
+                    <div class="button-group">
+                        <button class="btn-primary" onclick="refreshJobsList()">
+                            🔄 Refresh
+                        </button>
+                        <button class="btn-secondary" onclick="autoRefreshJobs()">
+                            ⏱️ Auto Refresh (mỗi 2s)
+                        </button>
+                        <button class="btn-secondary" onclick="stopAutoRefresh()">
+                            ⏹️ Stop Auto
+                        </button>
+                    </div>
+                    
+                    <div id="jobsLoading" class="loading" style="display: none;">
+                        <span class="spinner"></span> Loading jobs...
+                    </div>
+                    
+                    <div id="jobsList" class="jobs-list"></div>
+                </div>
+            </div>
+            
+            <!-- API Test Tab -->
+            <div id="test" class="tab-content">
+                <div class="section">
+                    <h2>API Endpoints Test</h2>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <h3 style="margin-bottom: 10px;">1. Health Check</h3>
+                        <button class="btn-primary" onclick="testEndpoint('health')">
+                            Test GET /health
+                        </button>
+                        <div id="testHealth" class="code-block" style="margin-top: 10px; display: none;"></div>
+                    </div>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <h3 style="margin-bottom: 10px;">2. Get Jobs List</h3>
+                        <button class="btn-primary" onclick="testEndpoint('jobs-list')">
+                            Test GET /jobs-list
+                        </button>
+                        <div id="testJobsList" class="code-block" style="margin-top: 10px; display: none;"></div>
+                    </div>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <h3 style="margin-bottom: 10px;">3. Check Specific Job</h3>
+                        <div class="form-group">
+                            <label for="testJobId">Job ID:</label>
+                            <input type="text" id="testJobId" placeholder="Enter job ID">
+                        </div>
+                        <button class="btn-primary" onclick="testJobProgress()">
+                            Test GET /job-progress/{job_id}
+                        </button>
+                        <div id="testJobProgress" class="code-block" style="margin-top: 10px; display: none;"></div>
+                    </div>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <h3 style="margin-bottom: 10px;">4. Request Specs</h3>
+                        <div class="code-block">
+<strong>Base URL:</strong>
+http://localhost:5000/api/go-quick
+
+<strong>Endpoints:</strong>
+GET  /health                      - Server health
+GET  /jobs-list                    - List all jobs
+GET  /job-progress/{job_id}        - Check job progress
+POST /job-cancel/{job_id}          - Cancel a job
+POST /read-quick                   - Quick read CCCD
+POST /process-cccd                 - Process batch CCCD
+
+<strong>Headers:</strong>
+Content-Type: application/json (for JSON)
+Content-Type: multipart/form-data (for files)
+
+<strong>File Size Limits:</strong>
+Max per request: 500MB
+Recommended: < 100MB
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const API_BASE = 'http://localhost:5000/api/go-quick';
+        let currentJobId = null;
+        let pollInterval = null;
+        let autoRefreshInterval = null;
+        
+        // ========== Initialization ==========
+        
+        window.addEventListener('load', () => {
+            checkServerStatus();
+            setupFilePreviewers();
+        });
+        
+        async function checkServerStatus() {
+            try {
+                const response = await fetch(`${API_BASE}/health`);
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    document.getElementById('statusAlert').innerHTML = 
+                        '✅ <strong>Server is running!</strong> Ready to process CCCD';
+                    document.getElementById('statusAlert').className = 'alert alert-success';
+                } else {
+                    throw new Error('API not available');
+                }
+            } catch (error) {
+                document.getElementById('statusAlert').innerHTML = 
+                    '❌ <strong>Server is not running!</strong> Please start: python api_server.py';
+                document.getElementById('statusAlert').className = 'alert alert-error';
+            }
+        }
+        
+        // ========== Tab Navigation ==========
+        
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Deactivate all buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            
+            // Activate button
+            event.target.classList.add('active');
+            
+            // Special handling for jobs tab
+            if (tabName === 'jobs') {
+                refreshJobsList();
+            }
+        }
+        
+        // ========== File Previewers ==========
+        
+        function setupFilePreviewers() {
+            ['mtFile', 'msFile', 'batchFile'].forEach(id => {
+                document.getElementById(id).addEventListener('change', (e) => {
+                    const file = e.target.files[0];
+                    if (!file) return;
+                    
+                    const previewId = id === 'mtFile' ? 'mtPreview' :
+                                     id === 'msFile' ? 'msPreview' :
+                                     'batchPreview';
+                    
+                    const preview = document.getElementById(previewId);
+                    preview.textContent = `📄 ${file.name} (${formatFileSize(file.size)})`;
+                    preview.style.display = 'block';
+                });
+            });
+        }
+        
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+        }
+        
+        // ========== Quick Read ==========
+        
+        async function handleQuickRead() {
+            const mtFile = document.getElementById('mtFile').files[0];
+            const msFile = document.getElementById('msFile').files[0];
+            
+            if (!mtFile || !msFile) {
+                alert('❌ Vui lòng chọn cả 2 file ảnh');
+                return;
+            }
+            
+            try {
+                showAlert('info', '⏳ Đang xử lý...');
+                
+                const formData = new FormData();
+                formData.append('mt', mtFile);
+                formData.append('ms', msFile);
+                
+                const response = await fetch(`${API_BASE}/read-quick`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (result.status === 'success') {
+                    showAlert('success', '✅ Xử lý thành công!');
+                    displayResult('quickResult', 'quickResultData', result.data);
+                } else {
+                    showAlert('error', '❌ ' + result.message);
+                }
+            } catch (error) {
+                showAlert('error', '❌ Lỗi: ' + error.message);
+            }
+        }
+        
+        function clearQuickRead() {
+            document.getElementById('mtFile').value = '';
+            document.getElementById('msFile').value = '';
+            document.getElementById('mtPreview').style.display = 'none';
+            document.getElementById('msPreview').style.display = 'none';
+            document.getElementById('quickResult').classList.remove('show');
+        }
+        
+        // ========== Batch Process ==========
+        
+        async function handleBatchSubmit() {
+            const file = document.getElementById('batchFile').files[0];
+            
+            if (!file) {
+                alert('❌ Vui lòng chọn file');
+                return;
+            }
+            
+            try {
+                const formData = new FormData();
+                formData.append('file', file);
+                
+                const response = await fetch(`${API_BASE}/process-cccd`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (result.job_id) {
+                    currentJobId = result.job_id;
+                    showProgressUI();
+                    startPolling();
+                } else {
+                    showAlert('error', '❌ Failed to submit batch');
+                }
+            } catch (error) {
+                showAlert('error', '❌ Lỗi: ' + error.message);
+            }
+        }
+        
+        function startPolling() {
+            pollInterval = setInterval(pollProgress, 1000);
+        }
+        
+        async function pollProgress() {
+            if (!currentJobId) return;
+            
+            try {
+                const response = await fetch(`${API_BASE}/job-progress/${currentJobId}`);
+                const result = await response.json();
+                
+                if (result.status === 'success') {
+                    const job = result.data;
+                    updateProgressUI(job);
+                    
+                    if (job.status === 'completed' || job.status === 'failed') {
+                        stopPolling();
+                        if (job.status === 'completed') {
+                            showAlert('success', '✅ Xử lý hoàn thành!');
+                            displayResult('batchResult', 'batchResultData', job.result);
+                        } else {
+                            showAlert('error', '❌ Xử lý thất bại: ' + job.error);
+                        }
+                    }
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        
+        function updateProgressUI(job) {
+            document.getElementById('progressFill').style.width = job.progress + '%';
+            document.getElementById('progressFill').textContent = job.progress + '%';
+            document.getElementById('progressPercent').textContent = job.progress + '%';
+            document.getElementById('statusText').textContent = job.status.toUpperCase();
+            document.getElementById('messageText').textContent = job.message;
+            document.getElementById('statsText').textContent = 
+                `📊 ${job.processed_cccd}/${job.total_cccd} CCCD xử lý • ${job.processed_images}/${job.total_images} ảnh`;
+            document.getElementById('jobIdText').textContent = job.job_id;
+            document.getElementById('statusDetailText').textContent = job.status;
+            document.getElementById('createdAtText').textContent = new Date(job.created_at).toLocaleString();
+            document.getElementById('updatedAtText').textContent = new Date(job.updated_at).toLocaleString();
+        }
+        
+        function showProgressUI() {
+            document.getElementById('progressSection').classList.add('show');
+            document.getElementById('cancelBtn').style.display = 'inline-block';
+            document.getElementById('batchResult').classList.remove('show');
+        }
+        
+        function hideProgressUI() {
+            document.getElementById('progressSection').classList.remove('show');
+            document.getElementById('cancelBtn').style.display = 'none';
+        }
+        
+        function stopPolling() {
+            if (pollInterval) {
+                clearInterval(pollInterval);
+                pollInterval = null;
+            }
+        }
+        
+        async function handleCancel() {
+            if (!currentJobId) return;
+            
+            try {
+                const response = await fetch(`${API_BASE}/job-cancel/${currentJobId}`, {
+                    method: 'POST'
+                });
+                
+                const result = await response.json();
+                if (result.cancelled) {
+                    showAlert('info', '⏹️ Job cancelled');
+                    stopPolling();
+                    hideProgressUI();
+                }
+            } catch (error) {
+                showAlert('error', '❌ Lỗi: ' + error.message);
+            }
+        }
+        
+        function clearBatch() {
+            document.getElementById('batchFile').value = '';
+            document.getElementById('batchPreview').style.display = 'none';
+            stopPolling();
+            hideProgressUI();
+            document.getElementById('batchResult').classList.remove('show');
+            currentJobId = null;
+        }
+        
+        // ========== Jobs Monitor ==========
+        
+        async function refreshJobsList() {
+            try {
+                document.getElementById('jobsLoading').style.display = 'block';
+                
+                const response = await fetch(`${API_BASE}/jobs-list`);
+                const result = await response.json();
+                
+                document.getElementById('jobsLoading').style.display = 'none';
+                
+                if (result.status === 'success' && result.jobs.length > 0) {
+                    let html = '';
+                    
+                    result.jobs.forEach(job => {
+                        html += `
+                        <div class="job-item">
+                            <div class="job-header">
+                                <div>
+                                    <div class="job-id">ID: ${job.job_id}</div>
+                                    <div style="margin-top: 5px;">Status: <span class="job-status ${job.status}">${job.status.toUpperCase()}</span></div>
+                                </div>
+                                <div>${formatDate(job.updated_at)}</div>
+                            </div>
+                            <div class="job-progress">
+                                <div class="job-progress-bar">
+                                    <div class="job-progress-fill" style="width: ${job.progress}%"></div>
+                                </div>
+                                <div style="font-size: 12px; color: #666; margin-top: 5px;">
+                                    ${job.progress}% • ${job.message}
+                                </div>
+                            </div>
+                            ${job.total_cccd > 0 ? `
+                            <div style="font-size: 12px; color: #999;">
+                                📊 ${job.processed_cccd}/${job.total_cccd} CCCD
+                            </div>
+                            ` : ''}
+                        </div>
+                        `;
+                    });
+                    
+                    document.getElementById('jobsList').innerHTML = html;
+                } else {
+                    document.getElementById('jobsList').innerHTML = 
+                        '<div class="alert alert-info">No jobs found</div>';
+                }
+            } catch (error) {
+                document.getElementById('jobsLoading').style.display = 'none';
+                document.getElementById('jobsList').innerHTML = 
+                    '<div class="alert alert-error">Error loading jobs: ' + error.message + '</div>';
+            }
+        }
+        
+        function autoRefreshJobs() {
+            if (autoRefreshInterval) return;
+            autoRefreshInterval = setInterval(refreshJobsList, 2000);
+            showAlert('info', '⏱️ Auto refresh enabled (every 2s)');
+        }
+        
+        function stopAutoRefresh() {
+            if (autoRefreshInterval) {
+                clearInterval(autoRefreshInterval);
+                autoRefreshInterval = null;
+                showAlert('info', '⏹️ Auto refresh stopped');
+            }
+        }
+        
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleTimeString();
+        }
+        
+        // ========== API Test ==========
+        
+        async function testEndpoint(endpoint) {
+            const elementId = 'test' + endpoint.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join('');
+            const element = document.getElementById(elementId);
+            element.style.display = 'block';
+            element.innerHTML = '<span class="spinner" style="margin-right: 10px;"></span>Loading...';
+            
+            try {
+                const response = await fetch(`${API_BASE}/${endpoint}`);
+                const data = await response.json();
+                element.textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                element.textContent = 'Error: ' + error.message;
+                element.style.color = 'red';
+            }
+        }
+        
+        async function testJobProgress() {
+            const jobId = document.getElementById('testJobId').value;
+            
+            if (!jobId) {
+                alert('Please enter a Job ID');
+                return;
+            }
+            
+            const element = document.getElementById('testJobProgress');
+            element.style.display = 'block';
+            element.innerHTML = '<span class="spinner" style="margin-right: 10px;"></span>Loading...';
+            
+            try {
+                const response = await fetch(`${API_BASE}/job-progress/${jobId}`);
+                const data = await response.json();
+                element.textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                element.textContent = 'Error: ' + error.message;
+                element.style.color = 'red';
+            }
+        }
+        
+        // ========== Utilities ==========
+        
+        function displayResult(sectionId, dataId, data) {
+            const section = document.getElementById(sectionId);
+            const dataElement = document.getElementById(dataId);
+            dataElement.textContent = JSON.stringify(data, null, 2);
+            section.classList.add('show');
+        }
+        
+        function showAlert(type, message) {
+            const element = document.getElementById('statusAlert');
+            element.textContent = message;
+            element.className = 'alert alert-' + type;
+        }
+    </script>
+</body>
+</html>
