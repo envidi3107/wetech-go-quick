@@ -113,6 +113,7 @@ class IDCardDetector:
         self.callbacks = callbacks or DefaultCallbacks()
         
         # Initialize models
+        model_dir = os.getenv("GO_QUICK_MODEL_DIR") or model_dir
         self.model_card = YOLO(f"{model_dir}/best.pt")
         self.model_corners = YOLO(f"{model_dir}/best2.pt")
         self.model_lines = YOLO(f"{model_dir}/best3.pt")
@@ -697,7 +698,7 @@ def initialize_system(
             return False, "License validation failed"
             
         # Initialize detection engine
-        detector = IDCardDetector(model_dir, callbacks)
+        detector = IDCardDetector(os.getenv("GO_QUICK_MODEL_DIR") or model_dir, callbacks)
         
         return True, "System initialized successfully"
         

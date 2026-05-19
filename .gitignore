@@ -1,0 +1,9 @@
+__pycache__/*.pt
+__pycache__/*.pth
+__pycache__/models.rar
+models/
+go-quick-models/
+work/
+work_*/
+*.pt
+*.pth

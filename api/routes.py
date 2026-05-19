@@ -13,6 +13,9 @@ import importlib.util
 # Thư mục gốc của tool-go-quick (không phụ thuộc sys.path để tránh nhầm với tool-go-invoice)
 _GO_QUICK_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+def get_model_dir():
+    return os.getenv("GO_QUICK_MODEL_DIR") or os.path.join(_GO_QUICK_DIR, "__pycache__")
+
 # Lazy import - chỉ import khi cần dùng
 CCCDExtractor = None
 CCCDExtractorStreaming = None
@@ -71,7 +74,7 @@ def get_model_cache():
         logger.info("🔄 Đang load models lần đầu (sẽ cache để tái sử dụng)...")
         
         # Dùng thư mục tool-go-quick (tránh nhầm với tool-go-invoice khi api_server thêm nhiều path)
-        base_dir = os.path.join(_GO_QUICK_DIR, "__pycache__")
+        base_dir = get_model_dir()
         _model_cache['base_dir'] = base_dir
         
         try:

@@ -52,7 +52,8 @@ class DetectWorker():
         self.type_ = type_
         # Lấy đường dẫn tuyệt đối của thư mục chứa main.py
         main_file_dir = os.path.dirname(os.path.abspath(__file__))
-        self.base_dir = os.path.join(main_file_dir, "__pycache__")
+        self.base_dir = os.getenv("GO_QUICK_MODEL_DIR") or os.path.join(main_file_dir, "__pycache__")
+        self.work_base_dir = os.getenv("GO_QUICK_WORK_DIR") or self.base_dir
         # Cache models để tránh load lại mỗi lần
         self.cached_models = cached_models
         self.model1 = None
@@ -65,7 +66,7 @@ class DetectWorker():
         self.job_id = job_id
         # Tạo unique session ID cho mỗi request để tránh conflict khi chạy đồng thời
         self.session_id = str(uuid.uuid4())[:8]
-        self.work_dir = os.path.join(self.base_dir, f"work_{self.session_id}")
+        self.work_dir = os.path.join(self.work_base_dir, f"work_{self.session_id}")
         
         # Import is_job_cancelled function
         self.is_job_cancelled_func = None
