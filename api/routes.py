@@ -221,7 +221,7 @@ def register_routes(app, prefix):
                 job_id,
                 status=JobStatus.RUNNING,
                 progress=10,
-                message="Đang tải mô hình..."
+                message="Đang tải dữ liệu..."
             )
             
             # Load models and process
@@ -232,7 +232,7 @@ def register_routes(app, prefix):
             manager.update_job(
                 job_id,
                 progress=30,
-                message="Mô hình đã tải. Đang xử lý..."
+                message="Đang đọc thông tin từ CCCD..."
             )
             
             # Create task
